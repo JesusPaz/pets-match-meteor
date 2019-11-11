@@ -48,3 +48,31 @@ app.post('/api/login', (req, res) => {
     }
   });
 });
+
+
+// Method to sing up in the server. in the body rcv the user and password
+app.post('/api/singup', (req, res) => {
+
+  const user = req.body.user
+  const password = req.body.password
+  const email = req.body.email
+
+  const users = db.collection("users");
+
+  users.find({ "user": user }).toArray(function (err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (result.length == 0) {
+        var newUser = { "user": user, "password": password, "email": email };
+        users.insertOne(newUser, function (err, res) {
+          if (err) throw err;
+        });
+
+        res.status(200).json({ message: 'User added successfully' });
+      } else {
+        res.status(401).json({ message: 'User already exists' });
+      }
+    }
+  });
+});

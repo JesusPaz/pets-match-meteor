@@ -2,6 +2,7 @@
   <v-app id="vue-app-color">
     <div id="Signup">
       <v-form v-model="valid">
+        <v-text-field label="User" v-model="user" :rules="userRules"></v-text-field>
         <v-text-field label="Email" v-model="email" :rules="emailRules"></v-text-field>
         <v-text-field
           label="Type password"
@@ -32,16 +33,24 @@
 </template>
 
 <script>
+const axios = require("axios");
 
 export default {
   name: "Signup",
 
   data() {
     return {
+      user: "",
       email: "",
       password: "",
       reenterpassword: "",
       valid: false,
+      userRules: [
+        user => !!user || "User is required",
+        user =>
+          /^([a-zA-Z0-9_\.\-]{4,14})+$/.test(user) ||
+          "User must be valid and a size between 4 and 14 characters "
+      ],
       emailRules: [
         email => !!email || "Email is required",
         email =>
@@ -60,16 +69,26 @@ export default {
   methods: {
     submit() {
       if (this.password == this.reenterpassword) {
-        if(this.email == this.password){
+        axios
+          .post("http://localhost:3000/api/singup", {
+            user: this.user,
+            email: this.email,
+            password: this.password
+          })
+          .then(response => {
+            if (response.status == 200) {
               localStorage.setItem("user", this.email);
               this.$emit("validUser", true);
               this.$router.push({ path: "home" });
-            }else{
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              alert(errorMessage);
             }
-          
+          })
+          .catch(error => {
+            if (error.response.status == 401) {
+              alert(error.response.data.message);
+            } else {
+              alert("Unexpected error, please contact the admin");
+            }
+          });
       } else {
         alert("The passwords does not match");
       }
