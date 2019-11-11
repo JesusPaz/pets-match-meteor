@@ -16,14 +16,16 @@
         <div>Breed: Terrier</div>
         <div>It's sterilized? : Yes</div>
         <div>Wants to reproduce? Yes</div>
+        <div>Location: Cali, Colombia</div>
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="orange" text>Like
-          <v-icon>mdi-heart</v-icon>
+        <v-btn icon color="blue lighten-2">
+          <v-icon>thumb_up</v-icon>
         </v-btn>
-
-        <v-btn color="orange" text>Dislike</v-btn>
+        <v-btn icon color="red lighten-2">
+          <v-icon>thumb_down</v-icon>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-app>
