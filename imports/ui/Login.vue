@@ -53,7 +53,7 @@ export default {
           if (response.status == 200) {
             localStorage.setItem("user", this.user);
             this.$emit("validUser", true);
-            this.$router.push({ path: "users" });
+            this.$router.push({ path: "home" });
           }
           console.log(response.status)
         })

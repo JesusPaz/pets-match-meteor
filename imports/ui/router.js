@@ -7,15 +7,19 @@ Vue.use(VueRouter)
 import Login from './Login.vue';
 import Home from './Home.vue';
 import Signup from './Signup.vue';
-import Users from './Users.vue'
+import Blackboard from './Blackboard.vue';
+import MyPets from "./MyPets.vue";
+import Lovers from "./Lovers.vue";
 
 
 const routes = [
     { path: '/', component: Login },
     {
-        path: '/home', component: Home,
+        path: '/blackboard', component: Blackboard,
         children: [
-            { path: '/users', component: Users, },
+            { path: '/home', component: Home},
+            { path: '/lovers', component: Lovers},
+            { path: '/mypets', component: MyPets},
         ]
     },
     { path: '/signup', component: Signup },
@@ -34,7 +38,7 @@ router.beforeEach((to, from, next) => {
     if (!validUser && viewIsPrivate) {
         next('/');
     } else if (!viewIsPrivate && validUser) {
-        next('/dependencies');
+        next('/home');
     } else {
         next();
     }
