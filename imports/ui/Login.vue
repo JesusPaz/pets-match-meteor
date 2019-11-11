@@ -19,6 +19,8 @@
 </template>
 
 <script>
+const axios = require("axios");
+
 export default {
   name: "Login",
   data() {
@@ -29,9 +31,8 @@ export default {
       userRules: [
         user => !!user || "User is required",
         user =>
-          /^([a-zA-Z0-9_\.\-]){4,14})+$/.test(
-            user
-          ) || "User must be valid and a size between 4 and 14 characters "
+          /^([a-zA-Z0-9_\.\-]{4,14})+$/.test(user) ||
+          "User must be valid and a size between 4 and 14 characters "
       ],
       passwordRules: [
         password => !!password || "Password is required",
@@ -43,15 +44,26 @@ export default {
   },
   methods: {
     submit() {
-      if (this.user == this.password) {
-        localStorage.setItem("user", this.user);
-        this.$emit("validUser", true);
-        this.$router.push({ path: "users" });
-      } else {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        alert(errorMessage);
-      }
+      axios
+        .post("http://localhost:3000/api/login", {
+          user: this.user,
+          password: this.password
+        })
+        .then(response => {
+          if (response.status == 200) {
+            localStorage.setItem("user", this.user);
+            this.$emit("validUser", true);
+            this.$router.push({ path: "users" });
+          }
+          console.log(response.status)
+        })
+        .catch(error => {
+          if (error.response.status == 401) {
+            alert(error.response.data.message);
+          }else{
+            alert("Unexpected error, please contact the admin");
+          }
+        });
     }
   }
 };
