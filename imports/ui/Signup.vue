@@ -73,7 +73,7 @@ export default {
           .post("http://localhost:3000/api/singup", {
             user: this.user,
             email: this.email,
-            password: this.password
+            password: this.password,
           })
           .then(response => {
             if (response.status == 200) {
