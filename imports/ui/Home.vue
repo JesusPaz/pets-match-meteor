@@ -24,6 +24,22 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-row justify="center">
+      <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+          <v-card-title class="headline text-center">Congratulations, it's a match!</v-card-title>
+
+          <v-card-text>Now you can talk to your matches in the section of Lovers</v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn color="green darken-1" text @click="okBtn">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-app>
 </template>
 
@@ -34,6 +50,7 @@ export default {
   data() {
     return {
       userName: localStorage.getItem("user"),
+      dialog: false,
       actPet: {
         id: "",
         image: "",
@@ -50,6 +67,10 @@ export default {
     };
   },
   methods: {
+    okBtn() {
+      dialog = false;
+      this.$router.go();
+    },
     likeDog() {
       axios
         .post(
@@ -62,8 +83,6 @@ export default {
           console.log(error);
         });
       this.isMatch();
-      //this.loadNextDog();
-      this.$router.go();
     },
     dislikeDog() {
       axios
@@ -76,12 +95,11 @@ export default {
         .catch(error => {
           console.log(error);
         });
-      //this.loadNextDog();
       this.$router.go();
     },
     loadNextDog() {
       axios
-        .get("http://localhost:3000/api/pets/next/"+this.userName)
+        .get("http://localhost:3000/api/pets/next/" + this.userName)
         .then(response => {
           this.actPet.image = response.data.image;
           this.actPet.name = response.data.name;
@@ -99,11 +117,21 @@ export default {
           console.log(error);
         });
     },
-    isMatch() {
-      axios
-        .get("http://localhost:3000/api/pets/match/"+this.userName+"/"+this.actPet.owner)
+    async isMatch() {
+      await axios
+        .get(
+          "http://localhost:3000/api/pets/match/" +
+            this.userName +
+            "/" +
+            this.actPet.owner
+        )
         .then(response => {
-          console.log(response.message);
+          // It's a match
+          if (response.data.message == "It's a match") {
+            this.dialog = true;
+          } else if (response.data.message == "It's not a match") {
+            this.$router.go();
+          }
         })
         .catch(error => {
           console.log(error);
@@ -111,9 +139,6 @@ export default {
     }
   },
   created() {
-    this.loadNextDog();
-  },
-  updated() {
     this.loadNextDog();
   }
 };

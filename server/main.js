@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import express from 'express';
 
+var store = require('store')
 const app = express();
 const bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
@@ -201,6 +202,7 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
 
   const userSend = req.params.usersend
   const userRcv = req.params.userrcv
+
   const users = db.collection("users");
   const pets = db.collection("pets");
 
@@ -209,45 +211,36 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
       console.log(err)
     } else {
       if (result.length == 1 && userSend && userRcv) {
+        var likePets = result[0].likePets;
+        var isMatch = false
+        var count = 0
+        var findPet = likePets.some(async function (nextId) {
+          let petOwner = await pets.findOne({ "_id": new ObjectID(nextId) })
+          // console.log(petOwner.owner + " " + userSend )
+          if (petOwner.owner == userSend) {
+            isMatch = true
+            res.status(200).json({ message: "It's a match" });
+            console.log("Match")
+            users.updateOne(
+              { "user": userRcv },
+              { $addToSet: { usersMatch: { $each: [userSend] } } }
+            )
 
-        if (result[0].likePets.length > 0) {
-          var findPet = false
+            users.updateOne(
+              { "user": userSend },
+              { $addToSet: { usersMatch: { $each: [userRcv] } } }
+            )
+          }
 
-          result[0].likePets.some(function (petId) {
-
-            pets.find({ "_id": new ObjectID(petId) }).toArray(function (err, result) {
-
-              if (err) {
-                console.log(err)
-              } else {
-                if (result.length > 0) {
-                  if (result[0].owner === userSend) {
-                    findPet = true
-                    res.status(200).json({ message: "It's a match" });
-                    console.log("match")
-
-                  }
-                }
-              }
-            })
-            return findPet
-          });
-
-          // chango to a for, it is sending two msg
-          // console.log(findPet)
-          // if (!findPet) {
-          //   res.status(401).json({ message: "It's not a match" });
-          //   console.log("Not match before the while")
-          // }
-
-
-        } else {
-          res.status(401).json({ message: "It's not a match" });
-          console.log("Not match list empty")
+          count++
+          return petOwner.owner == userSend
+        });
+        if (!findPet) {
+          res.status(200).json({ message: "It's not a match" });
         }
-
       } else {
         res.status(401).json({ message: 'Parameters are incorrect' });
+        console.log("Bad data")
       }
     }
   });
