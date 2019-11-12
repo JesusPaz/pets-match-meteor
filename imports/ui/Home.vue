@@ -52,31 +52,44 @@ export default {
   methods: {
     likeDog() {
       axios
-      .post("http://localhost:3000/api/pets/like/"+this.userName+"/"+this.actPet.id)
-      .catch(error => {
-        console.log(error);
-      });
-      this.loadNextDog();
+        .post(
+          "http://localhost:3000/api/pets/like/" +
+            this.userName +
+            "/" +
+            this.actPet.id
+        )
+        .catch(error => {
+          console.log(error);
+        });
+      this.isMatch();
+      //this.loadNextDog();
+      this.$router.go();
     },
     dislikeDog() {
       axios
-      .post("http://localhost:3000/api/pets/dislike/"+this.userName+"/"+this.actPet.id)
-      .catch(error => {
-        console.log(error);
-      });
-      this.loadNextDog();
+        .post(
+          "http://localhost:3000/api/pets/dislike/" +
+            this.userName +
+            "/" +
+            this.actPet.id
+        )
+        .catch(error => {
+          console.log(error);
+        });
+      //this.loadNextDog();
+      this.$router.go();
     },
     loadNextDog() {
       axios
-        .get("http://localhost:3000/api/pets/next/admin")
+        .get("http://localhost:3000/api/pets/next/"+this.userName)
         .then(response => {
           this.actPet.image = response.data.image;
           this.actPet.name = response.data.name;
           this.actPet.age = response.data.age;
           this.actPet.gender = response.data.gender;
           this.actPet.breed = response.data.breed;
-          (this.actPet.isSterialized = response.data.isSterialized),
-            (this.actPet.isReproduced = response.data.isReproduced);
+          this.actPet.isSterialized = response.data.isSterialized;
+          this.actPet.isReproduced = response.data.isReproduced;
           this.actPet.city = response.data.city;
           this.actPet.country = response.data.country;
           this.actPet.id = response.data.id;
@@ -85,9 +98,22 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    isMatch() {
+      axios
+        .get("http://localhost:3000/api/pets/match/"+this.userName+"/"+this.actPet.owner)
+        .then(response => {
+          console.log(response.message);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   created() {
+    this.loadNextDog();
+  },
+  updated() {
     this.loadNextDog();
   }
 };

@@ -3,9 +3,9 @@ import { WebApp } from 'meteor/webapp';
 import express from 'express';
 
 const app = express();
-
 const bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 var db;
 const MongoURI = "mongodb+srv://admin:admin@cluster0-n5sgi.mongodb.net/pets-match?retryWrites=true&w=majority";
 
@@ -67,7 +67,7 @@ app.post('/api/singup', (req, res) => {
 
         var newUser = {
           "user": user, "password": password, "email": email, likePets: [],
-          dislikePets: []
+          dislikePets: [], usersMatch: []
         };
 
         users.insertOne(newUser, function (err, res) {
@@ -190,4 +190,66 @@ app.post('/api/pets/dislike/:username/:idpet', (req, res) => {
       }
     }
   });
+});
+
+
+
+// Method search if the user given also like your pet (If it's a match)
+// user send: user that send a like
+// user rcv: user that recv a like
+app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
+
+  const userSend = req.params.usersend
+  const userRcv = req.params.userrcv
+  const users = db.collection("users");
+  const pets = db.collection("pets");
+
+  users.find({ "user": userRcv }).toArray(function (err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (result.length == 1 && userSend && userRcv) {
+
+        if (result[0].likePets.length > 0) {
+          var findPet = false
+
+          result[0].likePets.some(function (petId) {
+
+            pets.find({ "_id": new ObjectID(petId) }).toArray(function (err, result) {
+
+              if (err) {
+                console.log(err)
+              } else {
+                if (result.length > 0) {
+                  if (result[0].owner === userSend) {
+                    findPet = true
+                    res.status(200).json({ message: "It's a match" });
+                    console.log("match")
+
+                  }
+                }
+              }
+            })
+            return findPet
+          });
+
+          // chango to a for, it is sending two msg
+          // console.log(findPet)
+          // if (!findPet) {
+          //   res.status(401).json({ message: "It's not a match" });
+          //   console.log("Not match before the while")
+          // }
+
+
+        } else {
+          res.status(401).json({ message: "It's not a match" });
+          console.log("Not match list empty")
+        }
+
+      } else {
+        res.status(401).json({ message: 'Parameters are incorrect' });
+      }
+    }
+  });
+
 });
