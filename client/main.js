@@ -17,6 +17,11 @@ import router  from  '../imports/ui/router'
 
 import App from  '../imports/ui/App'
 
+
+import VImageInput from 'vuetify-image-input';
+ 
+Vue.component('VImageInput', VImageInput);
+
 Meteor.startup(() => {
    new Vue ({
      el: "#app", 

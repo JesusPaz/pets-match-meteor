@@ -9,7 +9,8 @@ import Home from './Home.vue';
 import Signup from './Signup.vue';
 import Blackboard from './Blackboard.vue';
 import MyPets from "./MyPets.vue";
-import Lovers from "./Lovers.vue";
+import Lovers from './Lovers.vue';
+import AddPet from './AddPet.vue';
 
 
 const routes = [
@@ -20,6 +21,7 @@ const routes = [
             { path: '/home', component: Home},
             { path: '/lovers', component: Lovers},
             { path: '/mypets', component: MyPets},
+            { path: '/addpet', component: AddPet},
         ]
     },
     { path: '/signup', component: Signup },

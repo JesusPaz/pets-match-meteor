@@ -30,12 +30,20 @@
             <v-list-item-subtitle v-text="item.breed"></v-list-item-subtitle>
           </v-list-item-content>
 
+          <v-list-item-content>
+            <v-list-item-subtitle v-text="item.age"></v-list-item-subtitle>
+          </v-list-item-content>
+
           <v-list-item-avatar>
             <v-img :src="item.avatar"></v-img>
           </v-list-item-avatar>
         </v-list-item>
       </v-list>
     </v-card>
+
+    <router-link :to="'/addpet'">
+      <v-btn absolute dark fab bottom right color="blue">Add</v-btn>
+    </router-link>
   </v-app>
 </template>
 
@@ -49,17 +57,16 @@ export default {
         {
           icon: true,
           name: "El mata gente",
-          age:"4 years",
+          age: "4 years",
           gender: "male",
           breed: "Pitbul",
-          city:"cali",
+          city: "cali",
           avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
         }
-      ],
-
+      ]
     };
-  },
-  updated(){
+  }
+  /* updated(){
     axios.get("http://localhost:3000/api/mypets/"+this.userName).
     then(response=>{
       
@@ -67,10 +74,7 @@ export default {
     .catch(error => {
           console.log(error);
         });
-
-
-
-  }
+  } */
 };
 </script>
 
