@@ -42,7 +42,7 @@
     </v-card>
 
     <router-link :to="'/addpet'">
-      <v-btn absolute dark fab bottom right color="blue">Add</v-btn>
+      <v-btn absolute dark fab center right color="blue">Add</v-btn>
     </router-link>
   </v-app>
 </template>
