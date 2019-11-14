@@ -35,7 +35,7 @@
           </v-list-item-content>
 
           <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
+            <v-img :src="item.image"></v-img>
           </v-list-item-avatar>
         </v-list-item>
       </v-list>
@@ -61,20 +61,23 @@ export default {
           gender: "male",
           breed: "Pitbul",
           city: "cali",
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+          image: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
         }
       ]
     };
+  },
+
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/mypets/" + this.userName)
+      .then(response => {
+        var rq = response.data;
+        this.items=rq;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
-  /* updated(){
-    axios.get("http://localhost:3000/api/mypets/"+this.userName).
-    then(response=>{
-      
-    })
-    .catch(error => {
-          console.log(error);
-        });
-  } */
 };
 </script>
 

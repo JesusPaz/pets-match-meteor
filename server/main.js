@@ -255,17 +255,22 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
 app.get('/api/mypets/:user', (req, res) => {
 
   const userparam = req.params.user
-
-  
   const pets = db.collection("pets");
 
+  resta = [];
   
-  pets.find({}, (err, result)=>{
+  pets.find({"owner":userparam}).toArray(function(err, result){
     if (err){
       res.status(500).send(err);
+    }else{
+      result.some(function (nextPet) {
+        resta.push(nextPet)
+      });
+
     }
-    res.send(pets);
+    res.send(resta);
   });
+
   });
 
 
