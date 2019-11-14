@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import express from 'express';
+import { read } from 'fs';
 
 var store = require('store')
 const app = express();
@@ -246,3 +247,41 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
   });
 
 });
+
+
+
+// Method for get the pets that a user have register
+// user: user that need to show his pets
+app.get('/api/mypets/:user', (req, res) => {
+
+  const userparam = req.params.user
+
+  
+  const pets = db.collection("pets");
+
+  
+  pets.find({}, (err, result)=>{
+    if (err){
+      res.status(500).send(err);
+    }
+    res.send(pets);
+  });
+  });
+
+
+// Method for get the pets that a user have register
+// user: user that need to show his pets
+app.get('/api/mylovers/:user', (req, res) => {
+
+  const userparam = req.params.user
+  
+  const pets = db.collection("pets");
+
+  
+  res.send(pets);
+
+});
+
+
+
+
