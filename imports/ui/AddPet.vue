@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-form v-model="valid">
-        <h2>Create a new dog</h2>
+      <h2>Create a new dog</h2>
       <v-image-input
         v-model="imageData"
         :image-quality="1"
@@ -27,9 +27,11 @@
 </template>
 
 <script>
+const axios = require("axios");
 export default {
   data() {
     return {
+      userName: localStorage.getItem("user"),
       genderItems: ["Male", "Female", "Fizz"],
       sterilized: ["Yes", "Not"],
       reproduction: ["Yes", "Not"],

@@ -11,6 +11,8 @@ import Blackboard from './Blackboard.vue';
 import MyPets from "./MyPets.vue";
 import Lovers from './Lovers.vue';
 import AddPet from './AddPet.vue';
+import ChatView from './ChatView.vue';
+
 
 
 const routes = [
@@ -22,6 +24,8 @@ const routes = [
             { path: '/lovers', component: Lovers},
             { path: '/mypets', component: MyPets},
             { path: '/addpet', component: AddPet},
+            { path: '/chatview', component: ChatView},
+            
         ]
     },
     { path: '/signup', component: Signup },
