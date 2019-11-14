@@ -24,6 +24,22 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-row justify="center">
+      <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+          <v-card-title class="headline text-center">Congratulations, it's a match!</v-card-title>
+
+          <v-card-text>Now you can talk to your matches in the section of Lovers</v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn color="green darken-1" text @click="okBtn">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-app>
 </template>
 
@@ -34,6 +50,7 @@ export default {
   data() {
     return {
       userName: localStorage.getItem("user"),
+      dialog: false,
       actPet: {
         id: "",
         image: "",
@@ -50,37 +67,71 @@ export default {
     };
   },
   methods: {
+    okBtn() {
+      dialog = false;
+      this.$router.go();
+    },
     likeDog() {
       axios
-      .post("http://localhost:3000/api/pets/like/"+this.userName+"/"+this.actPet.id)
-      .catch(error => {
-        console.log(error);
-      });
-      this.loadNextDog();
+        .post(
+          "http://localhost:3000/api/pets/like/" +
+            this.userName +
+            "/" +
+            this.actPet.id
+        )
+        .catch(error => {
+          console.log(error);
+        });
+      this.isMatch();
     },
     dislikeDog() {
       axios
-      .post("http://localhost:3000/api/pets/dislike/"+this.userName+"/"+this.actPet.id)
-      .catch(error => {
-        console.log(error);
-      });
-      this.loadNextDog();
+        .post(
+          "http://localhost:3000/api/pets/dislike/" +
+            this.userName +
+            "/" +
+            this.actPet.id
+        )
+        .catch(error => {
+          console.log(error);
+        });
+      this.$router.go();
     },
     loadNextDog() {
       axios
-        .get("http://localhost:3000/api/pets/next/admin")
+        .get("http://localhost:3000/api/pets/next/" + this.userName)
         .then(response => {
           this.actPet.image = response.data.image;
           this.actPet.name = response.data.name;
           this.actPet.age = response.data.age;
           this.actPet.gender = response.data.gender;
           this.actPet.breed = response.data.breed;
-          (this.actPet.isSterialized = response.data.isSterialized),
-            (this.actPet.isReproduced = response.data.isReproduced);
+          this.actPet.isSterialized = response.data.isSterialized;
+          this.actPet.isReproduced = response.data.isReproduced;
           this.actPet.city = response.data.city;
           this.actPet.country = response.data.country;
           this.actPet.id = response.data.id;
           this.actPet.owner = response.data.owner;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    async isMatch() {
+      await axios
+        .get(
+          "http://localhost:3000/api/pets/match/" +
+            this.userName +
+            "/" +
+            this.actPet.owner
+        )
+        .then(response => {
+          // It's a match
+          if (response.data.message == "It's a match") {
+            this.dialog = true;
+          } else if (response.data.message == "It's not a match") {
+            this.$router.go();
+          }
         })
         .catch(error => {
           console.log(error);

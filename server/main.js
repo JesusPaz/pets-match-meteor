@@ -2,10 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import express from 'express';
 
+var store = require('store')
 const app = express();
-
 const bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 var db;
 const MongoURI = "mongodb+srv://admin:admin@cluster0-n5sgi.mongodb.net/pets-match?retryWrites=true&w=majority";
 
@@ -67,7 +68,7 @@ app.post('/api/singup', (req, res) => {
 
         var newUser = {
           "user": user, "password": password, "email": email, likePets: [],
-          dislikePets: []
+          dislikePets: [], usersMatch: []
         };
 
         users.insertOne(newUser, function (err, res) {
@@ -190,4 +191,58 @@ app.post('/api/pets/dislike/:username/:idpet', (req, res) => {
       }
     }
   });
+});
+
+
+
+// Method search if the user given also like your pet (If it's a match)
+// user send: user that send a like
+// user rcv: user that recv a like
+app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
+
+  const userSend = req.params.usersend
+  const userRcv = req.params.userrcv
+
+  const users = db.collection("users");
+  const pets = db.collection("pets");
+
+  users.find({ "user": userRcv }).toArray(function (err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (result.length == 1 && userSend && userRcv) {
+        var likePets = result[0].likePets;
+        var isMatch = false
+        var count = 0
+        var findPet = likePets.some(async function (nextId) {
+          let petOwner = await pets.findOne({ "_id": new ObjectID(nextId) })
+          // console.log(petOwner.owner + " " + userSend )
+          if (petOwner.owner == userSend) {
+            isMatch = true
+            res.status(200).json({ message: "It's a match" });
+            console.log("Match")
+            users.updateOne(
+              { "user": userRcv },
+              { $addToSet: { usersMatch: { $each: [userSend] } } }
+            )
+
+            users.updateOne(
+              { "user": userSend },
+              { $addToSet: { usersMatch: { $each: [userRcv] } } }
+            )
+          }
+
+          count++
+          return petOwner.owner == userSend
+        });
+        if (!findPet) {
+          res.status(200).json({ message: "It's not a match" });
+        }
+      } else {
+        res.status(401).json({ message: 'Parameters are incorrect' });
+        console.log("Bad data")
+      }
+    }
+  });
+
 });
