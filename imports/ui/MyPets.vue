@@ -17,7 +17,7 @@
         </v-btn>
       </v-toolbar>
       <v-list>
-        <v-list-item v-for="item in items" :key="item.title" @click>
+        <v-list-item v-for="item in items" :key="item.title">
           <v-list-item-icon>
             <v-icon v-if="item.icon" color="pink">mdi-star</v-icon>
           </v-list-item-icon>
@@ -72,7 +72,7 @@ export default {
       .get("http://localhost:3000/api/mypets/" + this.userName)
       .then(response => {
         var rq = response.data;
-        this.items=rq;
+        this.items = rq;
       })
       .catch(error => {
         console.log(error);
