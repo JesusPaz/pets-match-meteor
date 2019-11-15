@@ -258,20 +258,20 @@ app.get('/api/mypets/:user', (req, res) => {
   const pets = db.collection("pets");
 
   resta = [];
-  
-  pets.find({"owner":userparam}).toArray(function(err, result){
-    if (err){
+
+  pets.find({ "owner": userparam }).toArray(function (err, result) {
+    if (err) {
       res.status(500).send(err);
-    }else{
+    } else {
       result.some(function (nextPet) {
-        resta.push(nextPet)
+        resta.push(nextPet);
       });
 
     }
     res.send(resta);
   });
 
-  });
+});
 
 
 // Method for get the pets that a user have register
@@ -279,11 +279,38 @@ app.get('/api/mypets/:user', (req, res) => {
 app.get('/api/mylovers/:user', (req, res) => {
 
   const userparam = req.params.user
-  
-  const pets = db.collection("pets");
 
-  
-  res.send(pets);
+  const pets = [];
+
+  const users = db.collection("users");
+  const petsTotal = db.collection("pets");
+
+  users.find({ "user": userparam }).toArray(function (err, result) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      result.some(function (nextUser) {
+        var matches = nextUser.usersMatch;
+        for (let i = 0; i < matches.length; i++) {
+          petsTotal.find({ "owner": matches[i] }).toArray(function (err, result1) {
+            if (err) {
+              res.status(500).send(err);
+            } else {
+              result1.some(function (nextPet) {
+                pets.push(nextPet);
+              });
+            }
+            res.send(pets);
+          });
+        }
+      });
+
+    }
+
+  });
+
+
+
 
 });
 

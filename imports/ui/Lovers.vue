@@ -39,7 +39,7 @@
           </v-list-item-action>
 
           <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
+            <v-img :src="item.image"></v-img>
           </v-list-item-avatar>
         </v-list-item>
       </v-list>
@@ -48,9 +48,11 @@
 </template>
 
 <script>
+const axios = require("axios");
 export default {
   data() {
     return {
+      userName: localStorage.getItem("user"),
       items: [
         {
           icon: true,
@@ -59,12 +61,23 @@ export default {
           gender: "female",
           breed: "Pitbul",
           city: "cali",
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
+          image: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
         }
       ]
     };
   },
-  methods: {}
+  methods: {},
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/mylovers/" + this.userName)
+      .then(response => {
+        var rq = response.data;
+        this.items = rq;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 };
 </script>
 
