@@ -308,10 +308,19 @@ app.get('/api/mylovers/:user', (req, res) => {
     }
 
   });
+});
 
 
 
+// Method to sing up in the server. in the body rcv the user and password
+app.post('/api/addpet', (req, res) => {
 
+  const pet = req.body.pet
+  
+
+  const pets = db.collection("pets");
+
+  
 });
 
 

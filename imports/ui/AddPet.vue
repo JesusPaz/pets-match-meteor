@@ -23,8 +23,8 @@
         :image-quality="1"
         clearable
         image-format="jpeg"
-        imageWidth=200
-        imageHeight=200
+        imageWidth="200"
+        imageHeight="200"
       />
 
       <v-text-field label="Name" v-model="name" :rules="nameRules"></v-text-field>
@@ -60,29 +60,23 @@ export default {
       city: "",
       country: "",
 
-      nameRules:[
-        name=> !!name || "Name is required"
+      nameRules: [name => !!name || "Name is required"],
+      ageRules: [
+        age => !!age || "Age is required",
+        age => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(age) || "Only numbers"
       ],
-      ageRules:[
-        age=> !!age || "Age is required",
-        age=> /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(age) || "Only numbers"
-      ],
-      breedRules:[
-        breed=> !!breed || "Breed is required"
-      ],
-      imageDataRules:[
-        imageData=> !!imageData || "An image is required"
-      ],
-      cityRules:[
-        city=> !!city || "City is required"
-      ],
-      countryRules:[
-        country=> !!country || "Country is required"
-      ],
+      breedRules: [breed => !!breed || "Breed is required"],
+      imageDataRules: [imageData => !!imageData || "An image is required"],
+      cityRules: [city => !!city || "City is required"],
+      countryRules: [country => !!country || "Country is required"]
     };
   },
   methods: {
-    submit() {}
+    submit() {
+      axios.post().catch(error => {
+        console.log(error);
+      });
+    }
   }
 };
 </script>
