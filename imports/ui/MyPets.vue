@@ -34,6 +34,7 @@
             <v-list-item-subtitle v-text="item.age"></v-list-item-subtitle>
           </v-list-item-content>
 
+
           <v-list-item-avatar>
             <v-img :src="item.image"></v-img>
           </v-list-item-avatar>
@@ -61,6 +62,7 @@ export default {
           gender: "male",
           breed: "Pitbul",
           city: "cali",
+          _id: null,
           image: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
         }
       ]
@@ -77,6 +79,28 @@ export default {
       .catch(error => {
         console.log(error);
       });
+  },
+
+  methods: {
+    delete(idUser) {
+      axios
+        .post()
+        .then(this.loadPets())
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    loadPets() {
+      axios
+        .get("http://localhost:3000/api/mypets/" + this.userName)
+        .then(response => {
+          var rq = response.data;
+          this.items = rq;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 };
 </script>

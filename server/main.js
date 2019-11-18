@@ -335,5 +335,12 @@ app.post('/api/addpet', (req, res) => {
 });
 
 
+app.post('/api/delete/:id', (req, res) => {
 
+  const userParam = req.params.id;
+  const pets = db.collection("pets");
+
+  pets.remove({_id:ObjectId (userParam)});
+  
+});
 
