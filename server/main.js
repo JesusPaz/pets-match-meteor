@@ -317,8 +317,19 @@ app.post('/api/addpet', (req, res) => {
 
   const pet = req.body.pet
   
-
   const pets = db.collection("pets");
+
+
+  var newPet = {};
+
+  pets.insertOne(pet, function (err, response){
+    if (err){
+      res.send(err);
+    }else{
+      res.status(200).send(response);
+    }
+  });
+
 
   
 });

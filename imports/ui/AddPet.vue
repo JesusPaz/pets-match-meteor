@@ -30,11 +30,15 @@
       <v-text-field label="Name" v-model="name" :rules="nameRules"></v-text-field>
       <v-text-field label="Age" v-model="age" :rules="ageRules"></v-text-field>
 
-      <v-select :items="genderItems" label="Gender"></v-select>
+      <v-select :items="genderItems" label="Gender" v-model="gender"></v-select>
 
       <v-text-field label="Breed" v-model="breed"></v-text-field>
-      <v-select :items="sterilized" label="¿Sterilized?"></v-select>
-      <v-select :items="reproduction" label="¿Do you want to reproduce your pet?"></v-select>
+      <v-select :items="sterilizedItems" label="¿Sterilized?" v-model="isSterialized"></v-select>
+      <v-select
+        :items="reproductionItems"
+        label="¿Do you want to reproduce your pet?"
+        v-model="isReproduced"
+      ></v-select>
       <v-text-field label="City" v-model="city"></v-text-field>
       <v-text-field label="Country" v-model="country"></v-text-field>
       <v-spacer></v-spacer>
@@ -50,13 +54,16 @@ export default {
     return {
       userName: localStorage.getItem("user"),
       genderItems: ["Male", "Female"],
-      sterilized: ["Yes", "Not"],
-      reproduction: ["Yes", "Not"],
+      sterilizedItems: ["Yes", "Not"],
+      reproductionItems: ["Yes", "Not"],
 
       name: "",
       age: "",
       breed: "",
+      gender: "",
       imageData: null,
+      isSterialized: "",
+      isReproduced: "",
       city: "",
       country: "",
 
@@ -73,9 +80,38 @@ export default {
   },
   methods: {
     submit() {
-      axios.post().catch(error => {
-        console.log(error);
-      });
+      axios
+        .post("http://localhost:3000/api/addpet/", {
+          pet: {
+            name: this.name,
+            age: this.age,
+            gender: this.gender,
+            breed: this.breed,
+            image: this.image,
+            isSterialized: this.isSterialized,
+            isReproduced: this.isReproduced,
+            city: this.city,
+            country: this.country,
+            owner: this.userName
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .then(
+          alert("Pet added"),
+
+          //creaning all the inputs
+          (this.name = ""),
+          (this.age = ""),
+          (this.breed = ""),
+          (this.gender = ""),
+          (this.imageData = null),
+          (this.isSterialized = ""),
+          (this.isReproduced = ""),
+          (this.city = ""),
+          (this.country = "")
+        );
     }
   }
 };
