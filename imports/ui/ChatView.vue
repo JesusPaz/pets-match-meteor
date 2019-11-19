@@ -30,10 +30,14 @@
 </template>
 
 <script>
+const axios = require("axios");
 export default {
   data() {
     return {
+      userName: localStorage.getItem("user"),
+      //logs es una lista con todos los mensajes a renderizar en el chat
       logs: [],
+      //msg es el mensaje a enviar
       msg: null
     };
   },
