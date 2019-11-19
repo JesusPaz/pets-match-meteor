@@ -35,7 +35,9 @@
           </v-list-item-content>
 
           <v-list-item-action>
-            <router-link :to="'/chatview'">Chat</router-link>
+            <router-link :to="'/chatview'">
+              <button @click="sendUserToChat(item.owner)">Chat</button>
+            </router-link>
           </v-list-item-action>
 
           <v-list-item-avatar>
@@ -59,6 +61,7 @@ export default {
           name: "Rosita fresita",
           age: "2 years",
           gender: "female",
+          owner: "owner",
           breed: "Pitbul",
           city: "cali",
           image: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
@@ -66,7 +69,12 @@ export default {
       ]
     };
   },
-  methods: {},
+  methods: {
+    //send the userId to the chat view
+    sendUserToChat(idUser) {
+      this.$root.$emit("id-user-chat", idUser);
+    }
+  },
   mounted() {
     axios
       .get("http://localhost:3000/api/mylovers/" + this.userName)

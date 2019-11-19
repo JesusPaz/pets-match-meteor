@@ -316,22 +316,19 @@ app.get('/api/mylovers/:user', (req, res) => {
 app.post('/api/addpet', (req, res) => {
 
   const pet = req.body.pet
-  
+
   const pets = db.collection("pets");
 
-
-  var newPet = {};
-
-  pets.insertOne(pet, function (err, response){
-    if (err){
+  pets.insertOne(pet, function (err, response) {
+    if (err) {
       res.send(err);
-    }else{
+    } else {
       res.status(200).send(response);
     }
   });
 
 
-  
+
 });
 
 
@@ -340,15 +337,33 @@ app.post('/api/delete/:_id', (req, res) => {
   const userParam = req.params._id;
   const pets = db.collection("pets");
 
-  pets.deleteOne({"_id":ObjectID(userParam)}, (err,result)=>{
-    if (err){
+  pets.deleteOne({ "_id": ObjectID(userParam) }, (err, result) => {
+    if (err) {
       res.send(err);
-    }else{
+    } else {
       res.status(200);
     }
-  } );
+  });
 
   res.status(200);
-  
+
+});
+
+//load or create new chat if does not exist a previos chat conversation
+app.post('/api/chat/:participantA/:participantB', (req,res)=>{
+
+  const userA = req.params.participantA;
+  const userB = req.params.participantB;
+
+  const chats = bd.collection("chats");
+
+  chats.find({$and:[{participantA:userA}, {participantB: userB}]}, (err,result)=>{
+    if (err){
+      res.status(500).send(err);
+    }else{
+      res.send(result);
+    }
+  });
+
 });
 

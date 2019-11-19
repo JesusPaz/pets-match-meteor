@@ -34,6 +34,7 @@ const axios = require("axios");
 export default {
   data() {
     return {
+      otherUserChat: null,
       userName: localStorage.getItem("user"),
       //logs es una lista con todos los mensajes a renderizar en el chat
       logs: [],
@@ -45,7 +46,29 @@ export default {
     submit() {
       this.logs.push(this.msg);
       this.msg = "";
+    },
+    loadChats() {
+      axios
+        .post("http://localhost:3000/api/chat/" + this.userName + "/"+this.otherUserChat)
+        .then(response => {
+          var rq = response;
+          this.logs = rq;
+          console.log("loading chats");
+          console.log(rq);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+  },
+
+  mounted() {
+    //retriving other user chat 
+    this.$root.$on("id-user-chat", formpr => {
+      this.otherUserChat = formpr;
+    });
+    
+    this.loadChats();
   },
   watch: {
     logs() {
