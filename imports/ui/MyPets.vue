@@ -34,6 +34,9 @@
             <v-list-item-subtitle v-text="item.age"></v-list-item-subtitle>
           </v-list-item-content>
 
+          <v-list-item-action>
+            <button @click="deletePet(item._id)">Delete</button>
+          </v-list-item-action>
 
           <v-list-item-avatar>
             <v-img :src="item.image"></v-img>
@@ -82,10 +85,12 @@ export default {
   },
 
   methods: {
-    delete(idUser) {
+    deletePet(idUser) {
       axios
-        .post()
-        .then(this.loadPets())
+        .post("http://localhost:3000/api/delete/"+idUser)
+        .then(
+          this.loadPets(),
+          )
         .catch(error => {
           console.log(error);
         });

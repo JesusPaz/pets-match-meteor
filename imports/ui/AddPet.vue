@@ -96,11 +96,9 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          console.log(error)
         })
         .then(
-          alert("Pet added"),
-
           //creaning all the inputs
           (this.name = ""),
           (this.age = ""),

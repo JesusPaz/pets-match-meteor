@@ -335,12 +335,20 @@ app.post('/api/addpet', (req, res) => {
 });
 
 
-app.post('/api/delete/:id', (req, res) => {
+app.post('/api/delete/:_id', (req, res) => {
 
-  const userParam = req.params.id;
+  const userParam = req.params._id;
   const pets = db.collection("pets");
 
-  pets.remove({_id:ObjectId (userParam)});
+  pets.deleteOne({"_id":ObjectID(userParam)}, (err,result)=>{
+    if (err){
+      res.send(err);
+    }else{
+      res.status(200);
+    }
+  } );
+
+  res.status(200);
   
 });
 
