@@ -1,20 +1,40 @@
 <template>
-  <v-app id="vue-app-color">
-    <div class="form-wrapper" id="Login">
-      <v-form v-model="valid">
-        <v-text-field label="User" v-model="user" :rules="userRules"></v-text-field>
-        <v-text-field :type="'password'" label="Password" v-model="password" :rules="passwordRules"></v-text-field>
-        <v-btn @click="submit" :disabled="!valid">Login</v-btn>
-      </v-form>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>You are not logged in?</p>
-      <br />
-      <router-link to="signup">Sign up</router-link>
-    </div>
+  <v-app>
+    <v-content class="back-img">
+      <v-row no-gutters>
+        <v-col m="6">
+          <v-card class="mx-auto" max-width="344" style="margin-top:20%; margin-left:10%;">
+            <v-card-text>
+              <p class="display-1 text--primary">Welcome to PetsMatch</p>
+
+              <div class="text--primary">
+                This is the place where your pet can make friends and have
+                a great time. Who knows, maybe you'll meet new people, too.
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col m="6">
+          <div class="form-wrapper" id="Login">
+            <v-form v-model="valid" style="margin-top:10%">
+              <v-text-field label="User" v-model="user" :rules="userRules"></v-text-field>
+              <v-text-field
+                :type="'password'"
+                label="Password"
+                v-model="password"
+                :rules="passwordRules"
+              ></v-text-field>
+              <v-btn @click="submit" :disabled="!valid">Login</v-btn>
+            </v-form>
+            <br />
+            <br />
+            <p>You are not logged in?</p>
+
+            <router-link to="signup">Sign up</router-link>
+          </div>
+        </v-col>
+      </v-row>
+    </v-content>
   </v-app>
 </template>
 
@@ -55,12 +75,12 @@ export default {
             this.$emit("validUser", true);
             this.$router.push({ path: "home" });
           }
-          console.log(response.status)
+          console.log(response.status);
         })
         .catch(error => {
           if (error.response.status == 401) {
             alert(error.response.data.message);
-          }else{
+          } else {
             alert("Unexpected error, please contact the admin");
           }
         });
@@ -81,6 +101,18 @@ export default {
 }
 
 #vue-app-color {
-  background-color: white;
+  background-color: red;
+}
+
+.back-img {
+  width: 100%;
+  background-image: url("https://img.wallpapersafari.com/desktop/1920/1080/75/39/qdC5mc.png");
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

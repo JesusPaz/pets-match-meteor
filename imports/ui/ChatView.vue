@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     submit() {
-
       var msgSend = this.userName +": "+this.msg
       axios
         .post(
@@ -72,6 +71,7 @@ export default {
           console.log(error);
         });
       this.msg = "";
+      this.$router.go();
     },
     loadChats() {
       axios

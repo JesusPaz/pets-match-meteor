@@ -18,13 +18,7 @@
         ></v-text-field>
         <v-btn @click="submit" :disabled="!valid">Sign up</v-btn>
       </v-form>
-
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
+      <p style="margin-top:5%">
         Go back to
         <router-link to="/home">Login</router-link>
       </p>
@@ -104,7 +98,7 @@ export default {
 }
 
 #Signup {
-  padding: 15% 25% 25% 25%;
+  padding: 2% 25% 25% 25%;
   block-size: 100px;
 }
 
