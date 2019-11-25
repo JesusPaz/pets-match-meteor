@@ -36,7 +36,7 @@
 
           <v-list-item-action>
             <router-link :to="'/chatview'">
-              <button @click="sendUserToChat(item.owner)">Chat</button>
+              <button @click="sendUserToChat(item.owner, item.name)">Chat</button>
             </router-link>
           </v-list-item-action>
 
@@ -71,8 +71,9 @@ export default {
   },
   methods: {
     //send the userId to the chat view
-    sendUserToChat(idUser) {
-      this.$root.$emit("id-user-chat", idUser);
+    sendUserToChat(idUser, petName) {
+      localStorage.setItem("id-user-chat", idUser);
+      localStorage.setItem("pet-name-chat", petName);
     }
   },
   mounted() {

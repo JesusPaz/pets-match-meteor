@@ -217,11 +217,10 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
         var count = 0
         var findPet = likePets.some(async function (nextId) {
           let petOwner = await pets.findOne({ "_id": new ObjectID(nextId) })
-          // console.log(petOwner.owner + " " + userSend )
           if (petOwner.owner == userSend) {
             isMatch = true
             res.status(200).json({ message: "It's a match" });
-            console.log("Match")
+            
             users.updateOne(
               { "user": userRcv },
               { $addToSet: { usersMatch: { $each: [userSend] } } }
@@ -350,20 +349,76 @@ app.post('/api/delete/:_id', (req, res) => {
 });
 
 //load or create new chat if does not exist a previos chat conversation
-app.post('/api/chat/:participantA/:participantB', (req,res)=>{
+app.post('/api/chat/:participantA/:participantB', async (req, res) => {
+  const userA = req.params.participantA;
+  const userB = req.params.participantB;
+  const chats = db.collection("chats");
+
+  let actChat = await chats.findOne({
+    $or: [
+      { $and: [{ participantA: userA }, { participantB: userB }] },
+      { $and: [{ participantA: userB }, { participantB: userA }] }
+    ]
+  });
+  // if the chat exists
+  if (actChat != null) {
+    res.status(200).send(actChat.messages);
+  } else {
+
+    var newChat = {
+      "participantA": userA, "participantB": userB,
+      messages: []
+    };
+
+    chats.insertOne(newChat, function (err, res) {
+      if (err) throw err;
+    });
+
+    var messages = [];
+    res.status(200).send(messages);
+  }
+});
+
+// Add a new message to the conversation
+app.post('/api/chat/addmsg/:participantA/:participantB/:msg', async (req, res) => {
 
   const userA = req.params.participantA;
   const userB = req.params.participantB;
+  const msg = req.params.msg;
+  const chats = db.collection("chats");
 
-  const chats = bd.collection("chats");
-
-  chats.find({$and:[{participantA:userA}, {participantB: userB}]}, (err,result)=>{
-    if (err){
-      res.status(500).send(err);
-    }else{
-      res.send(result);
-    }
+  let actChat = await chats.findOne({
+    $or: [
+      { $and: [{ participantA: userA }, { participantB: userB }] },
+      { $and: [{ participantA: userB }, { participantB: userA }] }
+    ]
   });
+  // if the chat exists
+  if (actChat != null) {
 
+    chats.updateOne(
+      {
+        $or: [
+          { $and: [{ participantA: userA }, { participantB: userB }] },
+          { $and: [{ participantA: userB }, { participantB: userA }] }
+        ]
+      },
+      { $addToSet: { messages: { $each: [msg] } } }
+    )
+
+    let actChat = await chats.findOne({
+      $or: [
+        { $and: [{ participantA: userA }, { participantB: userB }] },
+        { $and: [{ participantA: userB }, { participantB: userA }] }
+      ]
+    });
+
+    res.status(200).send(actChat.messages);
+
+
+  } else {
+    res.status(500).send("The chat do not exists");
+  }
 });
+
 
