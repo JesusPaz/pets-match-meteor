@@ -1,6 +1,9 @@
 <template>
   <v-app id="vue-app-color">
+
+    <v-content class="back-img">
     <div id="Signup">
+      <p>Please fill in the following fields</p>
       <v-form v-model="valid">
         <v-text-field label="User" v-model="user" :rules="userRules"></v-text-field>
         <v-text-field label="Email" v-model="email" :rules="emailRules"></v-text-field>
@@ -16,13 +19,14 @@
           v-model="reenterpassword"
           :rules="passwordRules"
         ></v-text-field>
-        <v-btn @click="submit" :disabled="!valid">Sign up</v-btn>
+        <v-btn @click="submit" :disabled="!valid" style="margin-top:2%">Sign up</v-btn>
       </v-form>
       <p style="margin-top:5%">
         Go back to
         <router-link to="/home">Login</router-link>
       </p>
     </div>
+    </v-content>
   </v-app>
 </template>
 
@@ -98,11 +102,23 @@ export default {
 }
 
 #Signup {
-  padding: 2% 25% 25% 25%;
-  block-size: 100px;
+  padding: 2% 60% 10% 5%;
+
 }
 
 #vue-app-color {
   background-color: white;
+}
+
+.back-img {
+  width: 100%;
+  background-image: url("https://img.wallpapersafari.com/desktop/1920/1080/98/26/K2DkFs.png");
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

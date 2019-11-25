@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content class="back-img">
+    <v-content class="back-img-log">
       <v-row no-gutters>
         <v-col m="6">
           <v-card class="mx-auto" max-width="344" style="margin-top:20%; margin-left:10%;">
@@ -104,7 +104,7 @@ export default {
   background-color: red;
 }
 
-.back-img {
+.back-img-log {
   width: 100%;
   background-image: url("https://img.wallpapersafari.com/desktop/1920/1080/75/39/qdC5mc.png");
   /* Full height */
