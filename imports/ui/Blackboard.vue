@@ -1,24 +1,26 @@
 <template>
-  <div id="Blackboard">
-    <v-bottom-navigation v-model="bottomNav">
-      <v-btn value="recent" to="/home">
-        <span>Home</span>
-      </v-btn>
+  <v-app id="vue-app-color">
+    <div id="Blackboard">
+      <v-bottom-navigation v-model="bottomNav">
+        <v-btn value="recent" to="/home">
+          <span>Home</span>
+        </v-btn>
 
-      <v-btn value="favorites" to="/lovers">
-        <span>Lovers</span>
-      </v-btn>
+        <v-btn value="favorites" to="/lovers">
+          <span>Lovers</span>
+        </v-btn>
 
-      <v-btn value="favorites" to="/mypets">
-        <span>My Pets</span>
-      </v-btn>
+        <v-btn value="favorites" to="/mypets">
+          <span>My Pets</span>
+        </v-btn>
 
-      <v-btn value="favorites" to="/" v-on:click.native="logout()" replace>
-        <span>Log Out</span>
-      </v-btn>
-    </v-bottom-navigation>
-    <router-view></router-view>
-  </div>
+        <v-btn value="favorites" to="/" v-on:click.native="logout()" replace>
+          <span>Log Out</span>
+        </v-btn>
+      </v-bottom-navigation>
+      <router-view></router-view>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -50,7 +52,8 @@ export default {
 </script>
 <style>
 #Blackboard {
-  padding: 5% 25% 25% 25%;
+  padding: 1% 25% 1% 25%;
   block-size: 100px;
 }
+
 </style>

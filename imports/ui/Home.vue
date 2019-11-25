@@ -149,4 +149,5 @@ export default {
   margin-top: 20px;
   background-color: white;
 }
+
 </style>

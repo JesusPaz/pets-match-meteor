@@ -55,18 +55,7 @@ export default {
   data() {
     return {
       userName: localStorage.getItem("user"),
-      items: [
-        {
-          icon: true,
-          name: "Rosita fresita",
-          age: "2 years",
-          gender: "female",
-          owner: "owner",
-          breed: "Pitbul",
-          city: "cali",
-          image: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-        }
-      ]
+      items: []
     };
   },
   methods: {

@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-layout align-center justify-center style="margin-center;margin-left: 1%;">
         <v-flex xs12 sm8 md12>
-          <v-card class="elevation-12" color="primary lighten-4" height="100%">
+          <v-card class="elevation-24" color="white" height="100%">
             <v-toolbar dark color="primary darken-1">
               <v-toolbar-title>{{chatName}}, Owner: {{otherUserChat}}</v-toolbar-title>
             </v-toolbar>
@@ -16,7 +16,7 @@
             </v-card-text>
             <v-card-actions>
               <v-form @submit.prevent="submit" style="width: 530px">
-                <v-text-field v-model="msg" label="Message" single-line solo-inverted></v-text-field>
+                <v-text-field v-model="msg" label="Message" single-line solo-inverted ></v-text-field>
               </v-form>
               <v-spacer></v-spacer>
               <v-btn

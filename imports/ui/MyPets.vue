@@ -57,18 +57,7 @@ export default {
   data() {
     return {
       userName: localStorage.getItem("user"),
-      items: [
-        {
-          icon: true,
-          name: "El mata gente",
-          age: "4 years",
-          gender: "male",
-          breed: "Pitbul",
-          city: "cali",
-          _id: null,
-          image: "https://cdn.vuetifyjs.com/images/lists/1.jpg"
-        }
-      ]
+      items: []
     };
   },
 
