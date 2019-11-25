@@ -52,9 +52,9 @@
 <script>
 const axios = require("axios");
 // Production
-//const url = "https://pets-match.herokuapp.com"
+const url = "https://pets-match.herokuapp.com"
 // Development
-const url = "http://localhost:3000"
+// const url = "http://localhost:3000"
 
 export default {
   data() {
