@@ -16,19 +16,24 @@
             </v-card-text>
             <v-card-actions>
               <v-form @submit.prevent="submit" style="width: 530px">
-                <v-text-field v-model="msg" label="Message" single-line solo-inverted ></v-text-field>
+                <v-row rows="12">
+                  <v-col cols="10">
+                    <v-text-field v-model="msg" label="Message" single-line solo-inverted></v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      fab
+                      dark
+                      small
+                      color="primary"
+                      type="submit"
+                      style="float: right; margin-bottom: 5%; margin-right: 1%; "
+                    >
+                      <v-icon dark>send</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-form>
-              <v-spacer></v-spacer>
-              <v-btn
-                fab
-                dark
-                small
-                color="primary"
-                type="submit"
-                style="float: right; margin-bottom: 5%; margin-right: 3%; "
-              >
-                <v-icon dark>send</v-icon>
-              </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -40,9 +45,9 @@
 <script>
 const axios = require("axios");
 // Production
-const url = "https://pets-match.herokuapp.com"
+//const url = "https://pets-match.herokuapp.com"
 // Development
-// const url = "http://localhost:3000"
+const url = "http://localhost:3000";
 
 export default {
   data() {
@@ -58,10 +63,11 @@ export default {
   },
   methods: {
     submit() {
-      var msgSend = this.userName +": "+this.msg
+      var msgSend = this.userName + ": " + this.msg;
       axios
         .post(
-          url+"/api/chat/addmsg/" +
+          url +
+            "/api/chat/addmsg/" +
             this.userName +
             "/" +
             this.otherUserChat +
@@ -80,12 +86,7 @@ export default {
     },
     loadChats() {
       axios
-        .post(
-          url+"/api/chat/" +
-            this.userName +
-            "/" +
-            this.otherUserChat
-        )
+        .post(url + "/api/chat/" + this.userName + "/" + this.otherUserChat)
         .then(response => {
           var rq = response.data;
           this.logs = rq;
