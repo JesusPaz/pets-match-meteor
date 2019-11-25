@@ -32,6 +32,10 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
 
 export default {
   name: "Signup",
@@ -68,7 +72,7 @@ export default {
     submit() {
       if (this.password == this.reenterpassword) {
         axios
-          .post("http://localhost:3000/api/singup", {
+          .post(url+"/api/singup", {
             user: this.user,
             email: this.email,
             password: this.password

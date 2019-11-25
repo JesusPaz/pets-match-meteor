@@ -40,6 +40,10 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
 
 export default {
   name: "Login",
@@ -65,7 +69,7 @@ export default {
   methods: {
     submit() {
       axios
-        .post("http://localhost:3000/api/login", {
+        .post(url+"/api/login", {
           user: this.user,
           password: this.password
         })

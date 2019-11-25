@@ -51,6 +51,11 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
+
 export default {
   data() {
     return {
@@ -67,7 +72,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:3000/api/mylovers/" + this.userName)
+      .get(url+"/api/mylovers/" + this.userName)
       .then(response => {
         var rq = response.data;
         this.items = rq;

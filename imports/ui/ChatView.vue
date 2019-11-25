@@ -39,6 +39,11 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
+
 export default {
   data() {
     return {
@@ -56,7 +61,7 @@ export default {
       var msgSend = this.userName +": "+this.msg
       axios
         .post(
-          "http://localhost:3000/api/chat/addmsg/" +
+          url+"/api/chat/addmsg/" +
             this.userName +
             "/" +
             this.otherUserChat +
@@ -76,7 +81,7 @@ export default {
     loadChats() {
       axios
         .post(
-          "http://localhost:3000/api/chat/" +
+          url+"/api/chat/" +
             this.userName +
             "/" +
             this.otherUserChat

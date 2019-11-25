@@ -49,6 +49,11 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
+
 export default {
   data() {
     return {
@@ -81,7 +86,7 @@ export default {
   methods: {
     submit() {
       axios
-        .post("http://localhost:3000/api/addpet/", {
+        .post(url+"/api/addpet/", {
           pet: {
             name: this.name,
             age: this.age,

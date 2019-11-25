@@ -53,6 +53,11 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
+
 export default {
   data() {
     return {
@@ -63,7 +68,7 @@ export default {
 
   mounted() {
     axios
-      .get("http://localhost:3000/api/mypets/" + this.userName)
+      .get(url+"/api/mypets/" + this.userName)
       .then(response => {
         var rq = response.data;
         this.items = rq;
@@ -76,7 +81,7 @@ export default {
   methods: {
     deletePet(idUser) {
       axios
-        .post("http://localhost:3000/api/delete/"+idUser)
+        .post(url+"/api/delete/"+idUser)
         .then(
           this.loadPets(),
           )
@@ -86,7 +91,7 @@ export default {
     },
     loadPets() {
       axios
-        .get("http://localhost:3000/api/mypets/" + this.userName)
+        .get(url+"/api/mypets/" + this.userName)
         .then(response => {
           var rq = response.data;
           this.items = rq;

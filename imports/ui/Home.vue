@@ -45,6 +45,10 @@
 
 <script>
 const axios = require("axios");
+// Production
+const url = "https://pets-match.herokuapp.com:3000"
+// Development
+// const url = "http://localhost:3000"
 
 export default {
   data() {
@@ -74,7 +78,7 @@ export default {
     likeDog() {
       axios
         .post(
-          "http://localhost:3000/api/pets/like/" +
+          url+"/api/pets/like/" +
             this.userName +
             "/" +
             this.actPet.id
@@ -87,7 +91,7 @@ export default {
     dislikeDog() {
       axios
         .post(
-          "http://localhost:3000/api/pets/dislike/" +
+          url+"/api/pets/dislike/" +
             this.userName +
             "/" +
             this.actPet.id
@@ -99,7 +103,7 @@ export default {
     },
     loadNextDog() {
       axios
-        .get("http://localhost:3000/api/pets/next/" + this.userName)
+        .get(url+"/api/pets/next/" + this.userName)
         .then(response => {
           this.actPet.image = response.data.image;
           this.actPet.name = response.data.name;
@@ -120,7 +124,7 @@ export default {
     async isMatch() {
       await axios
         .get(
-          "http://localhost:3000/api/pets/match/" +
+          url+"/api/pets/match/" +
             this.userName +
             "/" +
             this.actPet.owner
