@@ -26,6 +26,15 @@ app.use(
 )
 app.use(bodyParser.json())
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+  next();
+});
+
+
 // Method to login in the server. in the body rcv the user and password
 app.post('/api/login', (req, res) => {
 
@@ -220,7 +229,7 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
           if (petOwner.owner == userSend) {
             isMatch = true
             res.status(200).json({ message: "It's a match" });
-            
+
             users.updateOne(
               { "user": userRcv },
               { $addToSet: { usersMatch: { $each: [userSend] } } }
