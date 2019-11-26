@@ -228,23 +228,29 @@ app.get('/api/pets/match/:usersend/:userrcv', (req, res) => {
         var count = 0
         var findPet = likePets.some(async function (nextId) {
           let petOwner = await pets.findOne({ "_id": new ObjectID(nextId) })
-          if (petOwner.owner == userSend) {
-            isMatch = true
-            res.status(200).json({ message: "It's a match" });
+          if (petOwner != null) {
 
-            users.updateOne(
-              { "user": userRcv },
-              { $addToSet: { usersMatch: { $each: [userSend] } } }
-            )
 
-            users.updateOne(
-              { "user": userSend },
-              { $addToSet: { usersMatch: { $each: [userRcv] } } }
-            )
+            if (petOwner.owner == userSend) {
+              isMatch = true
+              res.status(200).json({ message: "It's a match" });
+
+              users.updateOne(
+                { "user": userRcv },
+                { $addToSet: { usersMatch: { $each: [userSend] } } }
+              )
+
+              users.updateOne(
+                { "user": userSend },
+                { $addToSet: { usersMatch: { $each: [userRcv] } } }
+              )
+            }
+
+            count++
+            return petOwner.owner == userSend
+          } else {
+            return false;
           }
-
-          count++
-          return petOwner.owner == userSend
         });
         if (!findPet) {
           res.status(200).json({ message: "It's not a match" });
@@ -346,6 +352,7 @@ app.post('/api/delete/:_id', (req, res) => {
 
   const userParam = req.params._id;
   const pets = db.collection("pets");
+  const users = db.collection("users");
 
   pets.deleteOne({ "_id": ObjectID(userParam) }, (err, result) => {
     if (err) {
@@ -354,6 +361,8 @@ app.post('/api/delete/:_id', (req, res) => {
       res.status(200);
     }
   });
+  // console.log(userParam)
+  users.updateMany({}, { $pull: { "likePets": userParam, "dislikePets": userParam } })
 
   res.status(200);
 
