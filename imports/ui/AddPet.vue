@@ -44,19 +44,35 @@
       <v-spacer></v-spacer>
       <v-btn @click="submit" :disabled="!valid">Add a new pet</v-btn>
     </v-form>
+    <br>
+    <br>
+    <v-alert
+      :value="alert"
+      type="success"
+      dismissible
+      color="cyan"
+      border="left"
+      elevation="2"
+      colored-border
+      transition="scale-transition"
+    >
+      A new pet has been added correctly :3.
+    </v-alert>
+    
   </v-app>
 </template>
 
 <script>
 const axios = require("axios");
 // Production
-const url = "https://pets-match.herokuapp.com"
+const url = "https://pets-match.herokuapp.com";
 // Development
 // const url = "http://localhost:3000"
 
 export default {
   data() {
     return {
+      alert: false,
       userName: localStorage.getItem("user"),
       genderItems: ["Male", "Female"],
       sterilizedItems: ["Yes", "Not"],
@@ -86,7 +102,7 @@ export default {
   methods: {
     submit() {
       axios
-        .post(url+"/api/addpet/", {
+        .post(url + "/api/addpet/", {
           pet: {
             name: this.name,
             age: this.age,
@@ -101,9 +117,10 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error)
+          console.log(error);
         })
         .then(
+          this.alert = true,
           //creaning all the inputs
           (this.name = ""),
           (this.age = ""),

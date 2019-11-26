@@ -14,7 +14,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col m="6">
+        <v-col m="6" id="logindiv">
           <div class="form-wrapper" id="Login">
             <v-form v-model="valid" style="margin-top:10%">
               <v-text-field label="User" v-model="user" :rules="userRules"></v-text-field>
@@ -94,6 +94,10 @@ export default {
 </script>
 
 <style>
+#logindiv{
+  box-shadow: 10px 10px 8px 10px #888888;
+}
+
 .form-wrapper {
   padding: 40px;
   text-align: center;
@@ -103,6 +107,8 @@ export default {
   padding: 15% 25% 25% 25%;
   block-size: 100px;
 }
+
+
 
 #vue-app-color {
   background-color: red;
