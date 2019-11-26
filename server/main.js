@@ -3,6 +3,7 @@ import { WebApp } from 'meteor/webapp';
 import express from 'express';
 import { read } from 'fs';
 
+var cors = require('cors');
 var store = require('store')
 const app = express();
 const bodyParser = require('body-parser');
@@ -26,14 +27,7 @@ app.use(
 )
 app.use(bodyParser.json())
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-  next();
-});
-
+app.use(cors());
 
 // Method to login in the server. in the body rcv the user and password
 app.post('/api/login', (req, res) => {

@@ -18,17 +18,25 @@
       </v-toolbar>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
-      <v-image-input
-        v-model="imageData"
-        :image-quality="1"
-        clearable
-        image-format="jpeg"
-        imageWidth="200"
-        imageHeight="200"
-      />
+      <v-img
+        class="white--text align-end"
+        height="300px"
+        width="350px"
+        :src="imageLink"
+        style="display: block;
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: 3%;
+          margin-bottom:3%;
+          width: 50%;"
+      ></v-img>
+      <div style="text-align:center; margin-bottom: 3%;">
+        <v-btn @click="randomImage">Generate a ramdom image</v-btn>
+      </div>
+      <v-text-field label="Image Link" v-model="imageLink" :rules="imageDataRules"></v-text-field>
 
       <v-text-field label="Name" v-model="name" :rules="nameRules"></v-text-field>
-      <v-text-field label="Age" v-model="age" :rules="ageRules"></v-text-field>
+      <v-text-field label="Age in years" v-model="age" :rules="ageRules"></v-text-field>
 
       <v-select :items="genderItems" label="Gender" v-model="gender"></v-select>
 
@@ -42,7 +50,9 @@
       <v-text-field label="City" v-model="city"></v-text-field>
       <v-text-field label="Country" v-model="country"></v-text-field>
       <v-spacer></v-spacer>
+      <div style="text-align:center; margin-bottom: 3%;">
       <v-btn @click="submit" :disabled="!valid">Add a new pet</v-btn>
+      </div>
     </v-form>
     <br>
     <br>
@@ -75,26 +85,25 @@ export default {
       alert: false,
       userName: localStorage.getItem("user"),
       genderItems: ["Male", "Female"],
-      sterilizedItems: ["Yes", "Not"],
-      reproductionItems: ["Yes", "Not"],
-
+      sterilizedItems: ["Yes", "No"],
+      reproductionItems: ["Yes", "No"],
       name: "",
       age: "",
       breed: "",
       gender: "",
-      imageData: null,
+      imageLink: "",
       isSterialized: "",
       isReproduced: "",
       city: "",
       country: "",
-
+      valid: false,
       nameRules: [name => !!name || "Name is required"],
       ageRules: [
         age => !!age || "Age is required",
         age => /^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$/.test(age) || "Only numbers"
       ],
       breedRules: [breed => !!breed || "Breed is required"],
-      imageDataRules: [imageData => !!imageData || "An image is required"],
+      imageDataRules: [imageLink => !!imageLink || "An image is required"],
       cityRules: [city => !!city || "City is required"],
       countryRules: [country => !!country || "Country is required"]
     };
@@ -105,10 +114,10 @@ export default {
         .post(url + "/api/addpet/", {
           pet: {
             name: this.name,
-            age: this.age,
+            age: this.age +" years",
             gender: this.gender,
             breed: this.breed,
-            image: this.image,
+            image: this.imageLink,
             isSterialized: this.isSterialized,
             isReproduced: this.isReproduced,
             city: this.city,
@@ -122,17 +131,32 @@ export default {
         .then(
           this.alert = true,
           //creaning all the inputs
-          (this.name = ""),
+
           (this.age = ""),
           (this.breed = ""),
           (this.gender = ""),
-          (this.imageData = null),
+          (this.imageLink = ""),
           (this.isSterialized = ""),
           (this.isReproduced = ""),
           (this.city = ""),
-          (this.country = "")
+          (this.country = ""),
+          (this.name = ""),
+          this.$router.push({ path: "mypets" })
         );
+    },
+    randomImage() {
+      axios
+        .get("https://dog.ceo/api/breeds/image/random")
+        .then(response => {
+          this.imageLink = response.data.message;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+  },
+  mounted() {
+    this.randomImage();
   }
 };
 </script>
