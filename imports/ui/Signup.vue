@@ -79,9 +79,9 @@ export default {
           })
           .then(response => {
             if (response.status == 200) {
-              localStorage.setItem("user", this.email);
+              localStorage.setItem("user", this.user);
               this.$emit("validUser", true);
-              this.$router.push({ path: "home" });
+              this.$router.push({ path: "mypets" });
             }
           })
           .catch(error => {

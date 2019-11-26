@@ -62,7 +62,7 @@ export default {
         password => !!password || "Password is required",
         password =>
           /^([a-zA-Z0-9]{6,14})+$/.test(password) ||
-          "The password must have uppercase and a size between 6 and 14 characters"
+          "The password must have a size between 5 and 15 characters"
       ]
     };
   },

@@ -46,7 +46,7 @@
 <script>
 const axios = require("axios");
 // Production
-const url = "https://pets-match.herokuapp.com"
+const url = "https://pets-match.herokuapp.com";
 // Development
 // const url = "http://localhost:3000"
 
@@ -77,12 +77,7 @@ export default {
     },
     likeDog() {
       axios
-        .post(
-          url+"/api/pets/like/" +
-            this.userName +
-            "/" +
-            this.actPet.id
-        )
+        .post(url + "/api/pets/like/" + this.userName + "/" + this.actPet.id)
         .catch(error => {
           console.log(error);
         });
@@ -90,12 +85,7 @@ export default {
     },
     dislikeDog() {
       axios
-        .post(
-          url+"/api/pets/dislike/" +
-            this.userName +
-            "/" +
-            this.actPet.id
-        )
+        .post(url + "/api/pets/dislike/" + this.userName + "/" + this.actPet.id)
         .catch(error => {
           console.log(error);
         });
@@ -103,7 +93,7 @@ export default {
     },
     loadNextDog() {
       axios
-        .get(url+"/api/pets/next/" + this.userName)
+        .get(url + "/api/pets/next/" + this.userName)
         .then(response => {
           this.actPet.image = response.data.image;
           this.actPet.name = response.data.name;
@@ -119,16 +109,14 @@ export default {
         })
         .catch(error => {
           console.log(error);
+          alert(
+            "Oh no, you're probably very flirtatious and you gave like to a lot of pets. Try it later when we have more pets for you champion."
+          );
         });
     },
     async isMatch() {
       await axios
-        .get(
-          url+"/api/pets/match/" +
-            this.userName +
-            "/" +
-            this.actPet.owner
-        )
+        .get(url + "/api/pets/match/" + this.userName + "/" + this.actPet.owner)
         .then(response => {
           // It's a match
           if (response.data.message == "It's a match") {
@@ -153,5 +141,4 @@ export default {
   margin-top: 20px;
   background-color: white;
 }
-
 </style>
